@@ -76,6 +76,7 @@
       <a href="#skills" style="font-size: 13px; color: rgba(255,255,255,0.55); text-decoration: none; font-weight: 500; transition: color 0.2s;" class="h0"><span data-t="nav_expertise">expertise</span></a>
       <a href="#projects" style="font-size: 13px; color: rgba(255,255,255,0.55); text-decoration: none; font-weight: 500; transition: color 0.2s;" class="h0"><span data-t="nav_projects">projects</span></a>
       <a href="#education" style="font-size: 13px; color: rgba(255,255,255,0.55); text-decoration: none; font-weight: 500; transition: color 0.2s;" class="h0"><span data-t="nav_education">education</span></a>
+      <a href="#certificates" style="font-size: 13px; color: rgba(255,255,255,0.55); text-decoration: none; font-weight: 500; transition: color 0.2s;" class="h0"><span data-t="nav_certs">certificates</span></a>
       <a href="#contact" class="nav-cta" style="font-size: 12px; padding: 8px 20px; background: rgba(255,255,255,0.1); color: #fff; border-radius: 8px; font-weight: 600; text-decoration: none; transition: background 0.2s;" class="h1"><span data-t="nav_contact">contact</span></a>
       <!-- Language toggle -->
       <button id="langBtn" onclick="toggleLang()" style="font-size: 12px; padding: 6px 14px; background: rgba(185,150,47,0.15); color: #b9962f; border: 1px solid rgba(185,150,47,0.25); border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s; letter-spacing: 0.03em;" class="h2">ES</button>
@@ -450,6 +451,18 @@
   </div>
 </section>
 
+<!-- CERTIFICATES -->
+<section id="certificates" style="background: #f8f9fa; padding: 100px 32px;">
+  <div style="max-width: 1120px; margin: 0 auto;">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+      <div style="width: 24px; height: 2px; background: #b9962f;"></div>
+      <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: #3a5a8c; font-weight: 600;"><span data-t="section_certs">Certificates</span></span>
+    </div>
+    <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 700; color: #0a1628; letter-spacing: -0.03em; margin-bottom: 40px;"><span data-t="certs_title">My Certificates</span></h2>
+    <div class="grid3" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;"><span id="certsList" style="display:contents"></span></div>
+  </div>
+</section>
+
 <!-- RESUME CTA -->
 <section id="resume" style="background: #0a1628; padding: 80px 32px;">
   <div style="max-width: 800px; margin: 0 auto; text-align: center;">
@@ -566,6 +579,24 @@ const jobsES = [
       { title: 'Insurance Claims Analyst', company: 'VENEASISTENCIA', period: 'Feb 2015 – Abr 2016', location: 'Caracas', duration: '1 año 3 meses', group: 'Other', accent: 'rgba(46,51,61,0.2)', desc: 'Procesamiento de reclamos, detección de fraude, liquidaciones.', highlights: null, tags: null },
     ];
 
+Object.assign(T, {
+  nav_certs: {en: 'certificates', es: 'certificados'},
+  section_certs: {en: 'Certificates', es: 'Certificados'},
+  certs_title: {en: 'My Certificates', es: 'Mis Certificados'},
+  cert_view: {en: 'View certificate', es: 'Ver certificado'},
+  cert_soon: {en: 'File coming soon', es: 'Archivo próximamente'},
+});
+
+// ===== CERTIFICADOS =====
+// Para agregar uno: sube el archivo (PDF o imagen) a assets/certificados/
+// y añade una línea aquí con el mismo nombre de archivo.
+const CERTS = [
+  { title: 'Scrum Foundation (SFPC)', org: 'CertiProf', year: '', file: 'assets/certificados/scrum-foundation.pdf' },
+  { title: 'EF SET English C1 Advanced', org: 'EF Education First · 64/100', year: '', file: 'assets/certificados/efset-c1.pdf' },
+  { title: 'Marketing Digital', org: 'Google', year: '', file: 'assets/certificados/marketing-digital-google.pdf' },
+  { title: 'Fundamentos de Power BI', org: 'Daxus Latam', year: '', file: 'assets/certificados/power-bi.pdf' },
+];
+
 let lang = localStorage.getItem('lang') || (navigator.language && navigator.language.startsWith('es') ? 'es' : 'en');
 let expFilter = 'All';
 const $ = (id) => document.getElementById(id);
@@ -579,8 +610,29 @@ function applyLang(){
   $('langBtn').textContent = (lang === 'en') ? 'ES' : 'EN';
   document.querySelectorAll('[data-t]').forEach(el => { el.textContent = t(el.getAttribute('data-t')); });
   document.querySelectorAll('[data-t-ph]').forEach(el => { el.placeholder = t(el.getAttribute('data-t-ph')); });
-  renderFilters(); renderJobs(); renderProjects();
+  renderFilters(); renderJobs(); renderProjects(); renderCerts();
   const btn = $('submitBtn'); if (btn && !btn.dataset.busy) btn.textContent = t('send');
+}
+
+function renderCerts(){
+  const el = $('certsList'); if (!el) return;
+  el.innerHTML = CERTS.map(c => {
+    const isImg = c.file && /\.(jpe?g|png|webp)$/i.test(c.file);
+    const thumb = isImg
+      ? `<img src="${c.file}" alt="${esc(c.title)}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">`
+      : `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#b9962f" stroke-width="1.2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M12 18v-6"></path><path d="M9 15l3 3 3-3"></path></svg>`;
+    const yearBadge = c.year ? `<span style="position:absolute; top:12px; right:12px; font-size:10px; padding:4px 10px; background:rgba(255,255,255,0.12); color:rgba(255,255,255,0.75); border-radius:6px; backdrop-filter:blur(4px);">${esc(c.year)}</span>` : '';
+    const inner = `
+      <div style="height:150px; background:linear-gradient(135deg,#0a1628,#1a2a42); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">${thumb}${yearBadge}</div>
+      <div style="padding:20px;">
+        <h3 style="font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:700; color:#0a1628; margin-bottom:6px;">${esc(c.title)}</h3>
+        <p style="font-size:13px; color:rgba(0,0,0,0.45); margin-bottom:12px;">${esc(c.org)}</p>
+        <span style="font-size:13px; font-weight:600; color:${c.file ? '#b9962f' : 'rgba(0,0,0,0.3)'};">${c.file ? t('cert_view') + ' →' : t('cert_soon')}</span>
+      </div>`;
+    return c.file
+      ? `<a class="projcard" href="${c.file}" target="_blank" rel="noopener" style="text-decoration:none; background:#fff; border-radius:16px; overflow:hidden; display:block; transition:transform 0.3s, box-shadow 0.3s;">${inner}</a>`
+      : `<div class="projcard" style="background:#fff; border-radius:16px; overflow:hidden; transition:transform 0.3s, box-shadow 0.3s;">${inner}</div>`;
+  }).join('');
 }
 
 function renderFilters(){

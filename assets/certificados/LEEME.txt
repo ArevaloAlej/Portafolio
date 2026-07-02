@@ -1,0 +1,10 @@
+Sube aquí tus certificados (PDF o imagen JPG/PNG) con EXACTAMENTE estos nombres:
+
+  scrum-foundation.pdf
+  efset-c1.pdf
+  marketing-digital-google.pdf
+  power-bi.pdf
+
+Cada tarjeta de la sección "Certificados" del sitio abre el archivo correspondiente.
+Para agregar una certificación nueva, pídeselo a Claude (o edita la lista CERTS en index.html).
+Recuerda subir también esta carpeta a GitHub (dentro de assets/).
