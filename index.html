@@ -670,6 +670,13 @@ function renderJobs(){
 }
 
 function renderProjects(){
+  // La sección Proyectos solo se muestra si al menos un proyecto tiene case study cargado
+  const hasContent = PROJECTS.en.some(p => p.caseStudy) || PROJECTS.es.some(p => p.caseStudy);
+  const section = document.getElementById('projects');
+  const navLink = document.querySelector('.nav-links a[href="#projects"]');
+  if (section) section.style.display = hasContent ? '' : 'none';
+  if (navLink) navLink.style.display = hasContent ? '' : 'none';
+  if (!hasContent) { $('projectsList').innerHTML = ''; return; }
   $('projectsList').innerHTML = PROJECTS[lang].map(p => `
     <div class="projcard" style="background:#f8f9fa; border-radius:16px; overflow:hidden; transition:transform 0.3s, box-shadow 0.3s;">
       <div style="height:180px; background:${p.gradient}; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
